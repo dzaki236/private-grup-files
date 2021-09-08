@@ -58,7 +58,8 @@ class TodosController extends Controller
      */
     public function edit($id)
     {
-        //
+        $todos = Todo::find($id);
+        return view('edit',compact('todos'));
     }
 
     /**
