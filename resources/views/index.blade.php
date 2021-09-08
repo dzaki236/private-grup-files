@@ -1,27 +1,73 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Data Blogs - SantriKoding.com</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+</head>
+<body style="background: lightgray">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card border-0 shadow rounded">
+                    <div class="card-body">
+                        <a href="{{ route('todos.create') }}" class="btn btn-md btn-success mb-3">TAMBAH TODO</a>
+                        <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th scope="col">Aktivitas</th>
+                                <th scope="col">Prioritas</th>
+                                <th scope="col">Aksi</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              @forelse ($todos as $todo)
+                                <tr>
+                                    <td>{{ $todo->aktivitas }}</td>
+                                    <td>{!! $todo->prioritas !!}</td>
+                                    <td class="text-center">
+                                        <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('todo.destroy', $blog->id) }}" method="POST">
+                                            <a href="{{ route('todos.edit', $todo->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                              @empty
+                                  <div class="alert alert-danger">
+                                      Data Blog belum Tersedia.
+                                  </div>
+                              @endforelse
+                            </tbody>
+                          </table>  
+                          {{ $blogs->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-    <title>todo list</title>
-  </head>
-  <body>
-    <h1 class="text-center">todo list</h1>
+    <script>
+        //message with toastr
+        @if(session()->has('success'))
+        
+            toastr.success('{{ session('success') }}', 'BERHASIL!'); 
 
-    <!-- Optional JavaScript; choose one of the two! -->
+        @elseif(session()->has('error'))
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+            toastr.error('{{ session('error') }}', 'GAGAL!'); 
+            
+        @endif
+    </script>
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
-    -->
-  </body>
+</body>
 </html>
